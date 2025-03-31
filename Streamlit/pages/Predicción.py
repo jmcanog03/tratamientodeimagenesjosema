@@ -21,17 +21,41 @@ except FileNotFoundError:
     st.error("Archivo 'svm_digits_model.pkl' no encontrado. Asegúrate de que el modelo esté disponible.")
 
 # Título y descripción
-st.title("Predicción de Dígitos con SVM")
-st.write("Dibuja un dígito en el lienzo y el modelo tratará de predecir qué número es.")
+st.title("🎨 Predicción de Dígitos con SVM")
+st.markdown("""
+Este es un modelo de predicción de dígitos manuscritos usando **Support Vector Machines (SVM)**. 
+Dibuja un dígito en el lienzo o sube una imagen para ver cómo el modelo predice el número.
+""")
+st.markdown("---")
+
+# Estilo para los botones
+button_style = """
+    <style>
+    .stButton>button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 10px 24px;
+        font-size: 16px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    .stButton>button:hover {
+        background-color: #45a049;
+    }
+    </style>
+"""
+st.markdown(button_style, unsafe_allow_html=True)
 
 # Configuración del lienzo
+st.subheader("✍️ Dibuja un dígito en el lienzo")
 canvas_result = st_canvas(
     fill_color="rgb(0, 0, 0)",          # Fondo negro
     stroke_width=20,                   # Grosor del trazo
     stroke_color="rgb(255, 255, 255)", # Trazo blanco
     background_color="rgb(0, 0, 0)",   # Fondo negro
-    width=150,
-    height=150,
+    width=300,
+    height=300,
     drawing_mode="freedraw",
     key="canvas"
 )
@@ -77,7 +101,7 @@ def preprocess_image(image):
         img_flat = img_normalized.flatten().reshape(1, -1)
 
         # Mostrar la imagen preprocesada
-        st.image(img_array, caption="Imagen ajustada y reducida a 8x8", width=100)
+        st.image(img_array, caption="Imagen ajustada y reducida a 8x8", width=150)
 
         return img_flat
     except Exception as e:
@@ -97,12 +121,12 @@ def predict(image, clf):
         return None
 
 # Botón para realizar la predicción
-if st.button("Predecir"):
+if st.button("🔍 Predecir", key="predict_button"):
     if canvas_result.image_data is not None:
         image_array = np.array(canvas_result.image_data)
         predicted_class = predict(image_array, clf)
         if predicted_class is not None:
-            st.subheader("Predicción")
+            st.subheader("✨ Predicción")
             st.write(f"El modelo predice que el número es: **{predicted_class}**")
         else:
             st.write("No se pudo realizar la predicción. Intenta dibujar nuevamente.")
@@ -110,7 +134,7 @@ if st.button("Predecir"):
         st.write("Por favor, dibuja un dígito en el lienzo.")
 
 # Comparación del preprocesamiento del lienzo y la imagen del dataset
-if st.button("Comparar Preprocesamiento con Dataset"):
+if st.button("🔄 Comparar Preprocesamiento con Dataset", key="compare_button"):
     lienzo_preprocessed = None
 
     # Imagen desde el lienzo
@@ -151,4 +175,14 @@ if archivo_subido is not None:
         st.error(f"Error al procesar la imagen subida: {e}")
 
 # Información adicional sobre la aplicación
-st.write("Esta aplicación usa OpenCV para procesar imágenes y Scikit-learn para predecir dígitos manuscritos.")
+st.markdown("""
+### 🚀 ¿Cómo funciona?
+
+Este modelo usa **Support Vector Machines (SVM)** para clasificar dígitos manuscritos. 
+El modelo se ha entrenado con un dataset de dígitos y ahora puede predecir los números que dibujes en el lienzo o subas como imágenes.
+
+#### 🧠 ¿Te interesa aprender más?
+- [Documentación de SVM en Scikit-learn](https://scikit-learn.org/stable/modules/svm.html)
+- [Tutorial sobre SVM en Towards Data Science](https://towardsdatascience.com/support-vector-machines-a-guide-for-beginners-940a7f6a1a0b)
+""")
+
