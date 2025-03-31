@@ -54,8 +54,8 @@ canvas_result = st_canvas(
     stroke_width=20,                   # Grosor del trazo
     stroke_color="rgb(255, 255, 255)", # Trazo blanco
     background_color="rgb(0, 0, 0)",   # Fondo negro
-    width=150,
-    height=150,
+    width=300,
+    height=300,
     drawing_mode="freedraw",
     key="canvas"
 )
