@@ -1,0 +1,9 @@
+streamlit
+streamlit-drawable-canvas
+streamlit-option-menu
+Pillow
+numpy
+scipy
+matplotlib
+seaborn
+scikit-learn
